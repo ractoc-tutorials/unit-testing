@@ -1,16 +1,16 @@
 package com.ractoc.tutorials.junit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PersonValidatorTest {
+class PersonValidatorTest {
 
 	private PersonValidator validator = new PersonValidator();
 
 	@Test
-	public void testValidatePerson() {
+	void testValidatePerson() {
 		// Given
 		Person person = new Person();
 		person.setFirstName("Valid First Name");
@@ -24,7 +24,7 @@ public class PersonValidatorTest {
 	}
 
 	@Test
-	public void testValidatePersonInvalidFirstName() {
+	void testValidatePersonInvalidFirstName() {
 		// Given
 		Person person = new Person();
 		person.setFirstName("Some#invalid*characters");
@@ -38,7 +38,7 @@ public class PersonValidatorTest {
 	}
 
 	@Test
-	public void testValidatePersonInvalidLastName() {
+	void testValidatePersonInvalidLastName() {
 		// Given
 		Person person = new Person();
 		person.setFirstName("Valid First Name");

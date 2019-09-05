@@ -1,65 +1,67 @@
 package com.ractoc.tutorials.junit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+@ExtendWith(MockitoExtension.class)
+class PersonHandlerConstructorInjectionTest {
 
-@RunWith(MockitoJUnitRunner.class)
-public class PersonHandlerConstructorInjectionTest {
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
 
-	@Mock
-	private PersonService mockedPersonService;
+    @Mock
+    private PersonService mockedPersonService;
 
-	private PersonHandler personHandler;
+    private PersonHandler personHandler;
 
-	@Before
-	public void setup() {
-		personHandler = new PersonHandler(mockedPersonService);
-	}
+    @BeforeEach
+    void setup() {
+        personHandler = new PersonHandler(mockedPersonService);
+    }
 
-	@Test
-	public void testGetPersonByName() throws Exception {
-		// Given
-		Person person = new Person();
-		person.setFirstName("firstName");
-		person.setLastName("lastName");
-		// normally, you would set this next call up with the exact string used in the getPersonByName.
-		when(mockedPersonService.getPersonByName(anyString(), anyString())).thenReturn(person);
+    @Test
+    void testGetPersonByName() throws PersonServiceException {
+        // Given
+        Person person = new Person();
+        person.setFirstName(FIRST_NAME);
+        person.setLastName(LAST_NAME);
+        // normally, you would set this next call up with the exact string used in the getPersonByName.
+        when(mockedPersonService.getPersonByName(anyString(), anyString())).thenReturn(person);
 
-		// When
-		Person result = personHandler.getPersonByName("firstName", "lastName");
+        // When
+        Person result = personHandler.getPersonByName(FIRST_NAME, LAST_NAME);
 
-		// Then
-		// When setting up the when() call with the exact strings used in the getPersonByName, this call should not be needed.
-		verify(mockedPersonService).getPersonByName("firstName", "lastName");
-		assertNotNull(result);
-		assertEquals("firstName", result.getFirstName());
-		assertEquals("lastName", result.getLastName());
-	}
+        // Then
+        // When setting up the when() call with the exact strings used in the getPersonByName, this call should not be needed.
+        verify(mockedPersonService).getPersonByName(FIRST_NAME, LAST_NAME);
+        assertNotNull(result);
+        assertEquals(FIRST_NAME, result.getFirstName());
+        assertEquals(LAST_NAME, result.getLastName());
+    }
 
-	@Test(expected = PersonServiceException.class)
-	public void testGetPersonByNamePersonServiceException() throws Exception {
-		// Given
-		Person person = new Person();
-		person.setFirstName("firstName");
-		person.setLastName("lastName");
-		// it is good practice to use an exception message not used in the actual code. This way, it is easy to determine if the
-		// exception is thrown by the mock or somewhere else.
-		when(mockedPersonService.getPersonByName(anyString(), anyString())).thenThrow(new PersonServiceException("test exception"));
+    @Test
+    void testGetPersonByNamePersonServiceException() throws PersonServiceException {
+        // Given
+        Person person = new Person();
+        person.setFirstName(FIRST_NAME);
+        person.setLastName(LAST_NAME);
+        // it is good practice to use an exception message not used in the actual code. This way, it is easy to determine if the
+        // exception is thrown by the mock or somewhere else.
+        when(mockedPersonService.getPersonByName(anyString(), anyString())).thenThrow(new PersonServiceException("test exception"));
 
-		// When
-		personHandler.getPersonByName("firstName", "lastName");
+        // When
+        assertThrows(PersonServiceException.class, () -> personHandler.getPersonByName(FIRST_NAME, LAST_NAME));
 
-		// Then
-		// Since the actuall call results in an exception, the Then is empty.
-	}
+        // Then
+        // Since the actuall call results in an exception, the Then is empty.
+    }
 
 }
