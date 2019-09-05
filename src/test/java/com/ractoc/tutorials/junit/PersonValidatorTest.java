@@ -10,7 +10,7 @@ public class PersonValidatorTest {
 	private PersonValidator validator = new PersonValidator();
 
 	@Test
-	public void testValidatePerson() throws Exception {
+	public void testValidatePerson() {
 		// Given
 		Person person = new Person();
 		person.setFirstName("Valid First Name");
@@ -24,7 +24,7 @@ public class PersonValidatorTest {
 	}
 
 	@Test
-	public void testValidatePersonInvalidFirstName() throws Exception {
+	public void testValidatePersonInvalidFirstName() {
 		// Given
 		Person person = new Person();
 		person.setFirstName("Some#invalid*characters");
@@ -38,7 +38,7 @@ public class PersonValidatorTest {
 	}
 
 	@Test
-	public void testValidatePersonInvalidLastName() throws Exception {
+	public void testValidatePersonInvalidLastName() {
 		// Given
 		Person person = new Person();
 		person.setFirstName("Valid First Name");
